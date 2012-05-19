@@ -1,0 +1,55 @@
+html
+    head
+        title= "Task Scheduler"
+        h1= title
+        script(type='text/javascript')
+            dojo.require("dijit.form.Form");
+            dojo.require("dijit.form.Button");
+            dojo.require("dijit.form.ValidationTextBox");
+            dojo.require("dijit.form.DateTextBox");
+            dojo.require("dijit.form.TextBox");
+            dojo.require("dijit.TitlePane");
+            dojo.require("dijit.form.Form");
+            function validateForm() {
+                if (dijit.byId("createForm").validate()) {
+                    return true;
+                } else {
+                    return false;
+                } 
+            }
+    body
+        div(align="center")
+            div(dojoType="dijit.TitlePane", title="Create a new task", toggleable="false", id="createTitlePane")
+                div
+                    form(method="post", action="addTask", dojoType="dijit.form.Form" ,onSubmit="return validateForm()", id="createForm")
+                        table(width="100%")
+                            tr
+                                td(align="left")
+                                    span task :
+                                    input(type="text", name="title", id="editTaskTitle", required="true" ,dojoType="dijit.form.ValidationTextBox") 
+                                td(align="center")
+                                    span due date:
+                                    input(name="body", id="editTaskBody", required="true", dojoType="dijit.form.DateTextBox")
+                                td(align="right")
+                                    input(type="submit", value="Send", dojoType="dijit.form.Button", label="Create Task")
+            br
+            div(dojoType="dijit.TitlePane", title="Pending tasks", toggleable="false", id="pendingTitlePane")
+                div(align="left")
+                    #tasks
+                        - each task in tasks
+                          form(method="post", action="updateTasks")
+                              div.task
+                                table(width="100%")
+                                    tr
+                                        td(align="left")
+                                            span.title= task.title
+                                            input(type="hidden", name="id", value=task._id)
+                                        td(align="right")
+                                            input(type="submit", label="Done", dojoType="dijit.form.Button", align="right")
+            br
+            div(dojoType="dijit.TitlePane", title="Completed tasks", toggleable="false", id="completeTitlePane")
+                div(align="left")
+                    #completed
+                        - each completedTask in completed
+                          div.complete
+                            span.title= completedTask.title
